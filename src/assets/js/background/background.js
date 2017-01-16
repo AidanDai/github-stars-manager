@@ -1,8 +1,8 @@
 import {upperCaseFirst} from '../helpers';
-import KEYS from '../keys';
-chrome.runtime.onInstalled.addListener(createAuthorizeTab);
-listenStorageChanges();
+// import KEYS from '../keys';
+// chrome.runtime.onInstalled.addListener(createAuthorizeTab);
 
+listenStorageChanges();
 /**
  * Listen for storage changes and log it
  */
@@ -57,10 +57,10 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
 /**
  * Create an authorization tab
  */
-function createAuthorizeTab() {
-  const scope = 'user:email,repo';
-  const ghPrefix = 'https://github.com';
-  const ghAuthPrefix = `${ghPrefix}/login/oauth/authorize`;
-  const ghAuth = `${ghAuthPrefix}?client_id=${KEYS.ID}&redirect_uri=${ghPrefix}/&scope=${scope}`;
-  chrome.tabs.create({url: ghAuth});
-}
+// function createAuthorizeTab() {
+//   const scope = 'user:email,repo';
+//   const ghPrefix = 'https://github.com';
+//   const ghAuthPrefix = `${ghPrefix}/login/oauth/authorize`;
+//   const ghAuth = `${ghAuthPrefix}?client_id=${KEYS.ID}&redirect_uri=${ghPrefix}/&scope=${scope}`;
+//   chrome.tabs.create({url: ghAuth});
+// }

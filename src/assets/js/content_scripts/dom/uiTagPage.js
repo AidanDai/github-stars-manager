@@ -2,6 +2,8 @@ import {$} from '../../helpers';
 import {displayLoaderWithMessage} from './uiFooterTagsInRepo';
 import {getTagIcon, getStarIcon, getJsonIcon} from './uiSvgIcons';
 import {StoredReposMngr} from '../storageSync/StoredReposMngr';
+import ghColors from './gh-language-colors.json';
+import moment from 'moment';
 
 /**
  * Function to run when user enter tag page
@@ -129,17 +131,67 @@ export async function changeRepoListInTagPage(tagItem) {
   reposSelectedByTag.repos.map((repo) => {
     let repoDesc = repo.description ? repo.description : '';
     repoListContent +=
-      '<li class="py-4 border-bottom">' +
-      '<a href="' + repo.html_url + '" data-repo="' + repo.repoID + '">' +
-      repo.full_name +
+      '<li class="d-block width-full py-4 border-bottom">' +
+      '<a href="' + repo.html_url + '" data-repo="' + repo.id + '">' +
+      repo.owner.login + ' / ' + '<strong>' + repo.name + '</strong>' +
       '</a>' +
       '<p>' + repoDesc + '</p>' +
+      addRepoDetailsBar(repo) +
       '</li>';
   });
 
   repoListContent += '</ul></div>';
   $('.loading-repos-tag-page').remove();
   jsRepoFilter.innerHTML += repoListContent;
+}
+
+/**
+ * @param {Object} repoDetails Details like Language used, Stars, Forks
+ * @return {string}
+ */
+function addRepoDetailsBar(repoDetails) {
+  /* eslint-disable max-len */
+
+  // ghColors
+  let repoDetailsContent = '';
+
+  repoDetailsContent += `<div class="f6 text-gray mt-2">`;
+
+  if (repoDetails.language) {
+    for (let color in ghColors) {
+      if (ghColors.hasOwnProperty(color)) {
+        if (color === repoDetails.language) {
+          repoDetailsContent += `
+            <span class="repo-language-color ml-0" style="background-color:${ghColors[color]}">
+            </span>
+            <span class="mr-3" itemprop="programmingLanguage">
+                ${repoDetails.language}
+            </span>
+          `;
+        }
+      }
+    }
+  }
+
+  repoDetailsContent += `
+    <a class="muted-link tooltipped tooltipped-s mr-3" href="${repoDetails.html_url}/stargazers" aria-label="Stargazers">
+      <svg aria-hidden="true" class="octicon octicon-star" height="16" version="1.1" viewBox="0 0 14 16" width="14">
+        <path fill-rule="evenodd" d="M14 6l-4.9-.64L7 1 4.9 5.36 0 6l3.6 3.26L2.67 14 7 11.67 11.33 14l-.93-4.74z"></path>
+      </svg>
+    ${repoDetails.stargazers_count}
+    </a>
+    
+    <a class="muted-link tooltipped tooltipped-s mr-3" href="${repoDetails.html_url}/network" aria-label="Forks">
+      <svg aria-hidden="true" class="octicon octicon-repo-forked" height="16" version="1.1" viewBox="0 0 10 16" width="10"><path fill-rule="evenodd" d="M8 1a1.993 1.993 0 0 0-1 3.72V6L5 8 3 6V4.72A1.993 1.993 0 0 0 2 1a1.993 1.993 0 0 0-1 3.72V6.5l3 3v1.78A1.993 1.993 0 0 0 5 15a1.993 1.993 0 0 0 1-3.72V9.5l3-3V4.72A1.993 1.993 0 0 0 8 1zM2 4.2C1.34 4.2.8 3.65.8 3c0-.65.55-1.2 1.2-1.2.65 0 1.2.55 1.2 1.2 0 .65-.55 1.2-1.2 1.2zm3 10c-.66 0-1.2-.55-1.2-1.2 0-.65.55-1.2 1.2-1.2.65 0 1.2.55 1.2 1.2 0 .65-.55 1.2-1.2 1.2zm3-10c-.66 0-1.2-.55-1.2-1.2 0-.65.55-1.2 1.2-1.2.65 0 1.2.55 1.2 1.2 0 .65-.55 1.2-1.2 1.2z"></path>
+      </svg>
+    ${repoDetails.forks}
+    </a>
+    
+    Updated <relative-time">${moment(repoDetails.pushed_at).fromNow()}</relative-time>
+  `;
+  repoDetailsContent += `</div>`;
+  return repoDetailsContent;
+  /* eslint-enable max-len */
 }
 
 /**

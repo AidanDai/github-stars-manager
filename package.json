@@ -5,7 +5,9 @@
   "main": "index.js",
   "watch": {
     "start": {
-      "patterns": ["src/**/"],
+      "patterns": [
+        "src/**/"
+      ],
       "extensions": "js,styl"
     }
   },
@@ -57,7 +59,10 @@
       "mocha": true
     },
     "rules": {
-      "max-len": ["error", 100]
+      "max-len": [
+        "error",
+        100
+      ]
     },
     "parser": "babel-eslint"
   },
@@ -78,7 +83,9 @@
     "file-loader": "^0.9.0",
     "husky": "^0.12.0",
     "jsdom": "^9.9.1",
+    "json-loader": "^0.5.4",
     "mocha": "^3.2.0",
+    "moment": "^2.17.1",
     "npm-run-all": "^3.1.2",
     "npm-watch": "^0.1.7",
     "postcss": "^5.2.8",

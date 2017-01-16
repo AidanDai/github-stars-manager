@@ -36,6 +36,10 @@ module.exports = {
             'style-loader', 'css-loader?modules!postcss-loader!stylus-loader'),
       },
       {
+        test: /\.json$/,
+        loader: 'json-loader',
+      },
+      {
         test: /\.(eot|otf|woff|woff2|ttf|svg)$/,
         loader: 'url-loader?limit=30000&name=[name].[ext]',
       },

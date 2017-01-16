@@ -1,3 +1,4 @@
+import {$} from '../helpers';
 import {HASH} from '../constants';
 import KEYS from '../keys';
 import '../../style/main.styl';
@@ -74,6 +75,14 @@ function intervalToCheckURL(starredRepos, reposInStorage, tagsInStorage) {
   let cachedLocationSearch;
   let intervalToCheckIfURLChanges = 500;
   setIntervalToCheckURL = setInterval(function() {
+    if (window.location.hash.indexOf(HASH.HOME) > -1) {
+      $('.ghstarmngr-tag-header-link').classList.add('active-menu-header');
+      document.querySelectorAll('.underline-nav-item').forEach((navItem) => {
+        navItem.classList.remove('selected');
+      });
+    } else {
+      $('.ghstarmngr-tag-header-link').classList.remove('active-menu-header');
+    }
     if (location.search.indexOf('tab=stars') > -1) {
       let changedTabsInStar = location.search !== cachedLocationSearch;
       let hashNoLongerExist = window.location.hash.indexOf(HASH.HOME) < 0;
