@@ -148,7 +148,7 @@ export async function changeRepoListInTagPage(tagItem) {
 export function exportTagsBts() {
   $('.js-repo-filter').innerHTML +=
     '<div class="col-12 ghstarsmngr-export-bts-container">' +
-    '<p class="main-title">Export all your ⭐, arranged by tags</p>' +
+    '<p class="main-title">Export all your ⭐ arranged by tags</p>' +
     '<button class="ghstarsmngr-export-bt btn btn-sm ghstarsmngr-export-bt-bookmarks">' +
     getStarIcon({width: 14, height: 13}) +
     'Export to bookmarks</button>' +
