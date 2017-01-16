@@ -1,0 +1,79 @@
+:global
+  .ghstarsmngr-sidebar
+    margin-top: 5px
+
+  .js-repo-filter
+    .ghstarsmngr-tag-page-loader
+      .ghstarmngr-loading-spinner-container
+        font-size: 32px
+        text-align: center
+
+        .ghstarmngr-loading-spinner
+          width: 30px
+          height: 30px
+          margin-right: 20px
+
+  .ghstarsmngr-feedback-export
+    font-size: 11px
+    color $green
+    margin-top: 8px
+
+  .ghstarsmngr-tag-count
+    display: inline-block
+    vertical-align: middle
+    background: $almostWhite
+    padding: 0 4px
+    border-radius: 3px
+    margin-left: 8px
+
+  .ghstarsmngr-sidebar-tag-list
+    list-style none
+
+    li
+      a.ghstarsmngr-sidebar-tag-list-link
+        display: block
+        padding: 10px 8px
+        transition: background .3s
+        font-size: 12px
+        color $darkGrey
+        background transparent
+
+        &.active-tag-link
+          color $link
+
+        &.active-tag-link svg
+          fill $link
+
+        svg
+          fill: $lightGrey
+          display: inline-block
+          vertical-align: middle
+          margin-right: 7px
+
+        &:hover
+          background $almostWhite
+          text-decoration none
+
+  .ghstarsmngr-export-bt
+    margin-right: 10px
+
+    svg
+      display: inline-block
+      fill $darkGrey
+      vertical-align: middle !important
+      margin-right: 4px
+
+  .ghstarsmngr-export-bts-container
+    margin: 12px 0 20px
+    border-bottom: 1px #e5e5e5 solid !important
+    margin-top: 23px
+
+  .ghstarsmngr-repo-list-container
+    .ghstarsmngr-repo-list
+      list-style: none
+
+  .loading-repos-tag-page
+    .ghstarmngr-loading-spinner-container
+      text-align: center
+      font-size: 16px
+
