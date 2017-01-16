@@ -1,7 +1,5 @@
 ![Github Stars Manager](./logo.png)
 
-# Github Stars Manager 
-
 This extension allows you to manage and organize your Github stars with tags and create categorized bookmark folder with the tags you created.
 
 You can then export those tags that you created to bookmarks in your Chrome browser or to a JSON file.
