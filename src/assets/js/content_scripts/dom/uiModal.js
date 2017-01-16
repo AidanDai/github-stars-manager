@@ -144,7 +144,14 @@ export function modalContentListTags(tags, repoID) {
       '<p class="ghstarmngr-subtitle-modal">Select a tag by clicking on it</p>' +
       '<ul class="ghstarmngr-modal-tag-list" data-repo="' + repoID + '">' +
       '<div class="ghstarmngr-modal-tag-list-container">';
-    tags.forEach((tag) => {
+
+    let tagsSorted = tags.sort((a, b) => {
+      let tagA = a.tagName;
+      let tagB = b.tagName;
+      return (tagA < tagB) ? -1 : (tagA > tagB) ? 1 : 0;
+    });
+
+    tagsSorted.forEach((tag) => {
       modalContent +=
         '<li class="border-bottom">' +
         '<span data-tag="' + tag.tagID + '" class="ghstarmngr-tag-item">' +
