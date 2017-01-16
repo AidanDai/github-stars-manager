@@ -1,23 +1,11 @@
 import {upperCaseFirst} from '../helpers';
-// import KEYS from '../keys';
-// chrome.runtime.onInstalled.addListener(createAuthorizeTab);
+import KEYS from '../keys';
 
-listenStorageChanges();
-/**
- * Listen for storage changes and log it
- */
-function listenStorageChanges() {
-  chrome.storage.onChanged.addListener((changes, storageArea) => {
-    for (let key in changes) {
-      if (changes.hasOwnProperty(key)) {
-        let storageChange = changes[key];
-        console.log(`Storage mode is '${storageArea}'`);
-        console.log(`Value in '${key}' key was '${storageChange.oldValue}',`);
-        console.log(`and now is '${storageChange.newValue}'`);
-      }
-    }
-  });
-}
+chrome.management.getSelf((self) => {
+  if (self.installType !== 'development') {
+    chrome.runtime.onInstalled.addListener(createAuthorizeTab);
+  }
+});
 
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
   if (request.createJson) {
@@ -57,10 +45,10 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
 /**
  * Create an authorization tab
  */
-// function createAuthorizeTab() {
-//   const scope = 'user:email,repo';
-//   const ghPrefix = 'https://github.com';
-//   const ghAuthPrefix = `${ghPrefix}/login/oauth/authorize`;
-//   const ghAuth = `${ghAuthPrefix}?client_id=${KEYS.ID}&redirect_uri=${ghPrefix}/&scope=${scope}`;
-//   chrome.tabs.create({url: ghAuth});
-// }
+function createAuthorizeTab() {
+  const scope = 'user:email,repo';
+  const ghPrefix = 'https://github.com';
+  const ghAuthPrefix = `${ghPrefix}/login/oauth/authorize`;
+  const ghAuth = `${ghAuthPrefix}?client_id=${KEYS.ID}&redirect_uri=${ghPrefix}/&scope=${scope}`;
+  chrome.tabs.create({url: ghAuth});
+}
