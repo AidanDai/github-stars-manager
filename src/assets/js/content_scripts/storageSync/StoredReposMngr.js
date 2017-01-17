@@ -148,10 +148,10 @@ export const StoredReposMngr = (() => {
   }
 
   return {
-    createRepoAndPushTag: createRepoAndPushTag,
-    getTagsAndRelatedRepos: getTagsAndRelatedRepos,
-    writeTagToRepo: writeTagToRepo,
-    hasRepoInStorage: hasRepoInStorage,
-    deleteTagFromRepo: deleteTagFromRepo,
+    createRepoAndPushTag,
+    getTagsAndRelatedRepos,
+    writeTagToRepo,
+    hasRepoInStorage,
+    deleteTagFromRepo,
   };
 })();

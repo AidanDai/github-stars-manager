@@ -148,13 +148,13 @@ export const StoredTagsMngr = (() => {
   }
 
   return {
-    createTag: createTag,
-    findIdToWriteNewTag: findIdToWriteNewTag,
-    hasTagInStorage: hasTagInStorage,
-    checkForTagsNotBeingUsed: checkForTagsNotBeingUsed,
-    getTagNameByID: getTagNameByID,
-    getTagIDByName: getTagIDByName,
-    getAllTagsInArray: getAllTagsInArray,
-    normalizeTagName: normalizeTagName,
+    createTag,
+    findIdToWriteNewTag,
+    hasTagInStorage,
+    checkForTagsNotBeingUsed,
+    getTagNameByID,
+    getTagIDByName,
+    getAllTagsInArray,
+    normalizeTagName,
   };
 })();

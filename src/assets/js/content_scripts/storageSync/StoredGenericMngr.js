@@ -46,10 +46,5 @@ export const StoredGenericMngr = (() => {
     await createOrUpdate(storedObject, objectResponse);
   }
 
-  return {
-    createOrUpdate: createOrUpdate,
-    createObjectIfMissing: createObjectIfMissing,
-    read: read,
-    deleteKey: deleteKey,
-  };
+  return {createOrUpdate, createObjectIfMissing, read, deleteKey};
 })();

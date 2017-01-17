@@ -226,9 +226,11 @@ export function hideStarredRepos() {
  * Show all starred repos when leave the Tag page
  */
 export function showStarredRepos() {
-  $('.paginate-container').classList.remove('ghstarsmngr-hide');
-  $('.user-profile-repo-filter').classList.remove('ghstarsmngr-hide');
-  document.querySelectorAll('.d-block.width-full.py-4').forEach((div) => {
-    div.classList.remove('ghstarsmngr-hide');
-  });
+  if ($('.paginate-container')) {
+    $('.paginate-container').classList.remove('ghstarsmngr-hide');
+    $('.user-profile-repo-filter').classList.remove('ghstarsmngr-hide');
+    document.querySelectorAll('.d-block.width-full.py-4').forEach((div) => {
+      div.classList.remove('ghstarsmngr-hide');
+    });
+  }
 }
