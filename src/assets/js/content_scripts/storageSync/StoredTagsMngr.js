@@ -88,10 +88,11 @@ export const StoredTagsMngr = (() => {
   }
 
   /**
+   * @param {Object|undefined} tagsObject
    * @return {Array}
    */
-  async function getAllTagsInArray() {
-    let storedTags = await StoredGenericMngr.read('t');
+  async function getAllTagsInArray(tagsObject = undefined) {
+    let storedTags = tagsObject ? tagsObject : await StoredGenericMngr.read('t');
     let tags = [];
     for (let tag in storedTags) {
       if (storedTags.hasOwnProperty(tag)) {

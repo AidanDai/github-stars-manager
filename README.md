@@ -10,6 +10,9 @@ You can download the extension [here](https://chrome.google.com/webstore/detail/
 
 ![Github Stars Manager](./howtouse.jpg)
 
+✨ Now you can also manage your tags inside the custom tag page ✨ 
+
+
 ### Storage
 
 The extension uses [storage.sync](https://developer.chrome.com/extensions/storage#property-sync) from Chrome API. The stored data of your github stars will **automatically be synced to any Desktop Chrome browser** that you are logged into, provided that you have sync enabled.

@@ -1,6 +1,6 @@
 {
   "name": "github-stars-manager",
-  "version": "0.0.0",
+  "version": "1.2.0",
   "description": "This extension allows you to manage and organize your Github stars with tags and create categorized bookmark folder with the tags you created.",
   "main": "index.js",
   "watch": {

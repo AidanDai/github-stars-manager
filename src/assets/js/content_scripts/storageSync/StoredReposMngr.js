@@ -54,7 +54,7 @@ export const StoredReposMngr = (() => {
   }
 
   /**
-   * @return {Object}
+   * @return {Array}
    */
   async function getTagsAndRelatedRepos() {
     let token = await getAccessTokenFromStorage();
@@ -65,10 +65,10 @@ export const StoredReposMngr = (() => {
   }
 
   /**
-   * @param {Array} starredRepos
+   * @param {Array|Object} starredRepos
    * @param {Object} storedRepos
    * @param {Object} storedTags
-   * @return {Object}
+   * @return {Array}
    */
   function getStarredReposWithTags(starredRepos, storedRepos, storedTags) {
     let tagsAndRelatedRepos = [];
@@ -106,9 +106,18 @@ export const StoredReposMngr = (() => {
    * @return {Boolean}
    */
   async function hasRepoInStorage(repoID) {
-    let storedRepos = await
-      StoredGenericMngr.read('r');
+    let storedRepos = await StoredGenericMngr.read('r');
     return repoID in storedRepos;
+  }
+
+  /**
+   * Check if a Repository exist
+   * @param {Number} repoID
+   * @return {Object}
+   */
+  async function getRepoTagsByRepoID(repoID) {
+    let storedRepos = await StoredGenericMngr.read('r');
+    return storedRepos[repoID];
   }
 
   /**
@@ -151,7 +160,10 @@ export const StoredReposMngr = (() => {
     createRepoAndPushTag,
     getTagsAndRelatedRepos,
     writeTagToRepo,
+    getStarredReposWithTags,
+    getUntaggedRepos,
     hasRepoInStorage,
     deleteTagFromRepo,
+    getRepoTagsByRepoID,
   };
 })();

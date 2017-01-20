@@ -19,19 +19,20 @@ export async function deleteTag(tag) {
  * @param {String} message Messaage to appear next to loading icon
  */
 export function insertLoader(message) {
-  const repoList = $('.js-repo-filter') || $('.repo-list');
-  const repoListItems = repoList.querySelectorAll('.d-block.width-full.py-4');
+  const repoList = getContainerDivRepo();
+  const repoListItems =
+    repoList.querySelectorAll('.d-block.width-full.py-4:not(.ghstarsmngr-hide)');
 
   repoListItems.forEach((repo) => {
     if (repo.querySelector('.ghstarmngr-repo-footer-tags')) {
       repo.querySelector('.ghstarmngr-repo-footer-tags').remove();
     }
-    repo.innerHTML +=
-      '<div class="ghstarmngr-loading-spinner-container">' +
-      '<div class="ghstarmngr-loading-spinner">' +
-      '</div>' +
-      message +
-      '</div>';
+    repo.innerHTML += `
+      <div class="ghstarmngr-loading-spinner-container">
+        <div class="ghstarmngr-loading-spinner">
+        </div>
+        ${message}
+      </div>`;
   });
 }
 
@@ -55,11 +56,12 @@ export async function handleUnstarBtInStarPage(actionBt) {
  * @return {String}
  */
 export function displayLoaderWithMessage(message) {
-  return '<div class="ghstarmngr-loading-spinner-container">' +
-    '<div class="ghstarmngr-loading-spinner">' +
-    '</div>' +
-    message +
-    '</div>';
+  return `
+    <div class="ghstarmngr-loading-spinner-container">
+      <div class="ghstarmngr-loading-spinner">
+      </div>
+      ${message}
+    </div>`;
 }
 
 /**
@@ -76,8 +78,9 @@ export function resetFeedbackMessage(delay = 0) {
  * Removes loading spinner
  */
 export function removeLoader() {
-  const repoList = $('.js-repo-filter') || $('.repo-list');
-  const repoListItems = repoList.querySelectorAll('.d-block.width-full.py-4');
+  const repoList = getContainerDivRepo();
+  const repoListItems =
+    repoList.querySelectorAll('.d-block.width-full.py-4:not(.ghstarsmngr-hide)');
 
   repoListItems.forEach((repo) => {
     let loadingSpinnerContainer = repo.querySelector('.ghstarmngr-loading-spinner-container');
@@ -103,12 +106,11 @@ export function insertBtCreateTag(starredRepos) {
       if (starBtContainer) {
         if (starredRepo.full_name === repoName) {
           let repoID = starredRepo.id;
-          starBtContainer.innerHTML +=
-            '<button class="btn btn-sm ghstarmngr-create-tag-bt" ' +
-            'data-repo=' + repoID + '>' +
-            getTagIcon({width: 14, height: 13}) +
-            'New tag' +
-            '</button>';
+          starBtContainer.innerHTML += `
+            <button class="btn btn-sm ghstarmngr-create-tag-bt" data-repo="${repoID}">
+              ${getTagIcon({width: 14, height: 13})}
+              New tag
+            </button>`;
         }
       }
     });
@@ -122,7 +124,7 @@ export function insertBtCreateTag(starredRepos) {
  * @param {Object} tagsInStorage
  */
 export function insertFooterTags(starredRepos, reposInStorage, tagsInStorage) {
-  if ($('.ghstarmngr-repo-footer-tags')) {
+  if ($('.d-block.width-full.py-4:not(.ghstarsmngr-hide) .ghstarmngr-repo-footer-tags')) {
     return;
   }
 
@@ -140,10 +142,10 @@ export function insertFooterTags(starredRepos, reposInStorage, tagsInStorage) {
     } else {
       numberOfTags = 0;
     }
-    tagContent +=
-      '<div class="ghstarmngr-repo-footer-tags">' +
-      getTagIcon({width: 14, height: 13}) +
-      '<p> ' + numberOfTags + ' tag' + (numberOfTags === 1 ? '' : 's') + '</p>';
+    tagContent += `
+      <div class="ghstarmngr-repo-footer-tags">
+        ${getTagIcon({width: 14, height: 13})}
+        <p> ${numberOfTags} tag${numberOfTags === 1 ? '' : 's'}</p>`;
 
     starredRepos.forEach((starredRepo) => {
       if (starredRepo.full_name === repoName) {
@@ -152,24 +154,36 @@ export function insertFooterTags(starredRepos, reposInStorage, tagsInStorage) {
         if (repoID in reposInStorage) {
           reposInStorage[repoID].forEach((tag) => {
             let tagName = StoredTagsMngr.getTagNameByID(tagsInStorage, tag);
-            tagContent +=
-              '<span class="ghstarmngr-tag-cell" ' +
-              'data-repo="' + repoID + '">' +
-              '<div class="ghstarmngr-delete-tag-icon">' +
-              getTrashcan({width: 16, height: 16}) +
-              '</div>' +
-              tagName +
-              '</span>';
+            tagContent += createDOMTagCell(repoID, tagName);
           });
         }
-        tagContent +=
-          '<a href="#" class="ghstarmngr-bt-existing-tag" data-repo="' + repoID + '">' +
-          getPlusIcon({width: 12, height: 15}) +
-          'Add existing tag</a>';
+        tagContent += `
+          <a href="#" class="ghstarmngr-bt-existing-tag" data-repo="${repoID}">
+            ${getPlusIcon({width: 12, height: 15})}
+            Add existing tag
+          </a>`;
       }
     });
-    repo.innerHTML = tagContent + '</div>';
+    repo.innerHTML = `
+        ${tagContent}
+      </div>`;
   });
+}
+
+/**
+ *
+ * @param {String|Number} repoID
+ * @param {String} tagName
+ * @return {string}
+ */
+export function createDOMTagCell(repoID, tagName) {
+  return `
+    <span class= "ghstarmngr-tag-cell" data-repo="${repoID}">
+      <div class="ghstarmngr-delete-tag-icon">
+        ${getTrashcan({width: 16, height: 16})} 
+      </div>
+      ${tagName}
+    </span>`;
 }
 
 /**
@@ -177,8 +191,9 @@ export function insertFooterTags(starredRepos, reposInStorage, tagsInStorage) {
  * @param {Function} callback
  */
 function loopThroughRepos(callback) {
-  const repoList = $('.js-repo-filter') || $('.repo-list');
-  const repoListItems = repoList.querySelectorAll('.d-block.width-full.py-4');
+  const repoList = getContainerDivRepo();
+  const repoListItems =
+    repoList.querySelectorAll('.d-block.width-full.py-4:not(.ghstarsmngr-hide)');
 
   repoListItems.forEach((repo) => {
     let repoRef = repo.querySelector('.d-inline-block a')
@@ -186,5 +201,13 @@ function loopThroughRepos(callback) {
 
     callback(repo, repoRef);
   });
+}
+
+/**
+ * Depending of which page the user is in, the container of repos will change its class
+ * @return {jQuery|HTMLElement}
+ */
+function getContainerDivRepo() {
+  return $('.ghstarsmngr-repo-list') || $('.js-repo-filter') || $('.repo-list');
 }
 

@@ -5,11 +5,13 @@ import '../../style/main.styl';
 import {initStorage, getAccessTokenFromStorage} from './storageSync/initStorageSync';
 import {StoredGenericMngr} from './storageSync/StoredGenericMngr';
 import {StoredTagsMngr} from './storageSync/StoredTagsMngr';
+import {addHeaderTagMenu, updateSidebarInTagPage} from './dom/uiTagPage';
 import {
   insertBtCreateTag,
   insertFooterTags,
   insertLoader,
   removeLoader,
+  displayLoaderWithMessage,
 } from './dom/uiFooterTagsInRepo';
 import {initDOM} from './dom/initDom';
 import {
@@ -27,8 +29,8 @@ init();
 function init() {
   StoredTagsMngr.checkForTagsNotBeingUsed();
   initStorage();
-  initDOM();
   createTagsInStarsPage();
+  initDOM();
 }
 
 let setIntervalToCheckURL;
@@ -49,16 +51,22 @@ export async function createTagsInStarsPage() {
     checkCodeParamAndSaveToken();
     return false;
   }
-
+  addHeaderTagMenu();
   let headerTagLink = document.querySelector('.ghstarmngr-tag-header-link');
   headerTagLink.setAttribute('href', `${userDetails.data.html_url}?tab=stars${HASH.HOME}`);
 
   if (isUserHome(userDetails) || isUserInStars()) {
     insertLoader('Loading tags...');
+    if ($('.ghstarsmngr-sidebar-tag-list')) {
+      $('.ghstarsmngr-sidebar-tag-list').innerHTML = displayLoaderWithMessage('Loading tags...');
+    }
     let starredRepos = await getUserStarredRepos(token);
     let reposInStorage = await StoredGenericMngr.read('r');
     let tagsInStorage = await StoredGenericMngr.read('t');
     removeLoader();
+    if ($('.ghstarsmngr-sidebar-tag-list')) {
+      updateSidebarInTagPage(starredRepos, reposInStorage, tagsInStorage);
+    }
     insertBtCreateTag(starredRepos);
     insertFooterTags(starredRepos, reposInStorage, tagsInStorage);
     intervalToCheckURL(starredRepos, reposInStorage, tagsInStorage);
@@ -127,6 +135,7 @@ export async function checkCodeParamAndSaveToken() {
     let end = url.data.indexOf('&');
     let accessToken = url.data.slice(begin, end);
     await StoredGenericMngr.createOrUpdate('token', accessToken);
+    window.location.href = 'https://github.com/';
   } else if (window.location.href.indexOf('https://github.com/login/oauth/authorize') === -1) {
     const scope = 'user:email,repo';
     const ghPrefix = 'https://github.com';
