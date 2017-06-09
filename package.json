@@ -62,7 +62,8 @@
       "max-len": [
         "error",
         100
-      ]
+      ],
+      "object-curly-spacing": "off"
     },
     "parser": "babel-eslint"
   },

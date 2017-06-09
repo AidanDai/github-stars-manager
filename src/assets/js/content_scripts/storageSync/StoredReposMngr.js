@@ -1,9 +1,9 @@
-import {modalFeedbackMessage} from '../../constants';
-import {StoredGenericMngr} from './StoredGenericMngr';
-import {StoredTagsMngr} from './StoredTagsMngr';
-import {showFeedbackInModal} from '../dom/uiModal';
-import {getUserStarredRepos} from '../githubAPI';
-import {getAccessTokenFromStorage} from '../storageSync/initStorageSync';
+import { modalFeedbackMessage } from '../../constants';
+import { StoredGenericMngr } from './StoredGenericMngr';
+import { StoredTagsMngr } from './StoredTagsMngr';
+import { showFeedbackInModal } from '../dom/uiModal';
+import { getUserStarredRepos } from '../githubAPI';
+import { getAccessTokenFromStorage } from '../storageSync/initStorageSync';
 
 export const StoredReposMngr = (() => {
   /**
@@ -125,16 +125,34 @@ export const StoredReposMngr = (() => {
    * storage
    * @param {Object} storedRepos
    * @param {Number} tagID
-   * @return {Boolean} tagStillExist
+   * @return {*} tagStillExist
    */
   function tagRefStillExistInARepo(storedRepos, tagID) {
     let tagStillExist = false;
     for (let repo in storedRepos) {
       if (storedRepos[repo].indexOf(tagID) > -1) {
-        tagStillExist = true;
+        return repo;
       }
     }
     return tagStillExist;
+  }
+
+  /**
+   * @param {String} tagID
+   */
+  async function deleteTagFromAllRepos(tagID) {
+    let storedTags = await StoredGenericMngr.read('t');
+    let storedRepos = await StoredGenericMngr.read('r');
+
+    const hasRepoWithThisTag = tagRefStillExistInARepo(storedRepos, Number(tagID));
+    const tagName = StoredTagsMngr.getTagNameByID(storedTags, tagID);
+
+    if (hasRepoWithThisTag) {
+      await deleteTagFromRepo(hasRepoWithThisTag, tagName);
+      await deleteTagFromAllRepos(tagID);
+    } else {
+      await StoredGenericMngr.deleteKey('t', tagID);
+    }
   }
 
   /**
@@ -164,6 +182,7 @@ export const StoredReposMngr = (() => {
     getUntaggedRepos,
     hasRepoInStorage,
     deleteTagFromRepo,
+    deleteTagFromAllRepos,
     getRepoTagsByRepoID,
   };
 })();

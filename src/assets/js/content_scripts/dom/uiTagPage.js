@@ -1,10 +1,11 @@
-import {$} from '../../helpers';
-import {displayLoaderWithMessage, createDOMTagCell} from './uiFooterTagsInRepo';
-import {getTagIcon, getPlusIcon, getStarIcon, getJsonIcon} from './uiSvgIcons';
-import {StoredReposMngr} from '../storageSync/StoredReposMngr';
-import {StoredTagsMngr} from '../storageSync/StoredTagsMngr';
+import { $ } from '../../helpers';
+import { displayLoaderWithMessage, createDOMTagCell } from './uiFooterTagsInRepo';
+import { getTagIcon, getPlusIcon, getStarIcon, getJsonIcon } from './uiSvgIcons';
+import { StoredReposMngr } from '../storageSync/StoredReposMngr';
+import { StoredTagsMngr } from '../storageSync/StoredTagsMngr';
 import ghColors from './gh-language-colors.json';
 import moment from 'moment';
+import {createTagsInStarsPage} from '../main';
 
 /**
  * Function to run when user enter tag page
@@ -33,7 +34,7 @@ export function addHeaderTagMenu() {
     $('.header-nav.float-left').innerHTML += `
         <li class="header-nav-item">
           <a class="header-nav-link ghstarmngr-tag-header-link">
-            ${getTagIcon({width: 14, height: 13})}
+            ${getTagIcon({ width: 14, height: 13 })}
             Tags
           </a>
         </li>`;
@@ -42,10 +43,11 @@ export function addHeaderTagMenu() {
 
 /**
  * Create sidebar in Tag Page that list tags
+ * @param {Boolean} isFull
  */
-export async function sidebarListTags() {
+export async function sidebarListTags(isFull = false) {
   $('.js-repo-filter').innerHTML += `
-    <div class="ghstarsmngr-tag-page-loader">
+    <div class="ghstarsmngr-tag-page-loader ${isFull ? 'ghstarsmngr-tag-page-loader-full' : ''}">
       ${displayLoaderWithMessage('Loading tag page...')}
     </div>`;
 
@@ -95,6 +97,8 @@ function sortTagsArrayByName(tagsAndRelatedRepos) {
   });
 }
 
+/* eslint-disable */
+
 /**
  *
  * @param {Object} tagAndRepos Object with tags and its related repositories
@@ -107,22 +111,43 @@ function createTagInSidebar(tagAndRepos) {
     tagContent += `
         <li class="border-bottom">
           <a class="ghstarsmngr-sidebar-tag-list-link" href="#" data-tag="${tagAndRepos.tag.tagID}">
-            ${getTagIcon({width: 14, height: 13})}
+            ${getTagIcon({ width: 14, height: 13 })}
             ${tagAndRepos.tag.tagName}
             <span class="ghstarsmngr-tag-count">${tagAndRepos.repos.length}</span>
+          </a>
+          <a href="#" class="button-clean-tag">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 95.939 95.939">
+              <path d="M62.82 47.97L95.35 15.436c.78-.78.78-2.047 0-2.828L83.332.586C82.96.21 82.45 0 81.92 0c-.53 0-1.04.21-1.415.586L47.97 33.12 15.435.587c-.75-.75-2.078-.75-2.828 0L.587 12.608c-.78.78-.78 2.047 0 2.828L33.12 47.97.588 80.504c-.78.78-.78 2.047 0 2.828l12.02 12.02c.375.376.884.587 1.414.587.53 0 1.04-.212 1.415-.587L47.97 62.818l32.535 32.535c.375.375.884.586 1.414.586.528 0 1.038-.212 1.413-.587l12.02-12.02c.78-.782.78-2.05 0-2.83L62.82 47.97z" fill="#e74c3c" />
+            </svg>
           </a>
         </li>`;
   } else {
     tagContent += `
         <li class="untagged-repos">
           <a class="ghstarsmngr-sidebar-tag-list-link" href="#">
-            ${getStarIcon({width: 14, height: 13})}
+            ${getStarIcon({ width: 14, height: 13 })}
             untagged
             <span class="ghstarsmngr-tag-count">${tagAndRepos.repos.length}</span>
           </a>
         </li>`;
   }
   return tagContent;
+}
+
+/* eslint-enable */
+
+/**
+ * Action when user click to delete a tag
+ * @param {Object} tag
+ */
+export async function cleanTag(tag) {
+  const liItem = tag.closest('.border-bottom');
+  const tagItem = liItem.querySelector('.ghstarsmngr-sidebar-tag-list-link');
+  const tagID = tagItem.dataset.tag;
+
+  await StoredReposMngr.deleteTagFromAllRepos(tagID);
+  await createTagsInStarsPage();
+  $('.untagged-repos .ghstarsmngr-sidebar-tag-list-link').click();
 }
 
 /**
@@ -192,7 +217,7 @@ async function createRepoItem(repo, tagsAndRelatedRepos) {
         <div class="float-right">
           <div class="starring-container">
             <button class="btn btn-sm ghstarmngr-create-tag-bt" data-repo="${repo.id}">
-              ${getTagIcon({width: 14, height: 13})}
+              ${getTagIcon({ width: 14, height: 13 })}
               New tag
             </button>
           </div>
@@ -205,7 +230,7 @@ async function createRepoItem(repo, tagsAndRelatedRepos) {
 
   repoItemContent += `
       <div class="ghstarmngr-repo-footer-tags">
-        ${getTagIcon({width: 14, height: 13})}
+        ${getTagIcon({ width: 14, height: 13 })}
         <p>${numberOfTags} tag${numberOfTags === 1 ? '' : 's'}</p>`;
 
   if (tagsInRepo) {
@@ -222,7 +247,7 @@ async function createRepoItem(repo, tagsAndRelatedRepos) {
 
   repoItemContent += `
           <a href="#" class="ghstarmngr-bt-existing-tag" data-repo="${repo.id}">
-            ${getPlusIcon({width: 12, height: 15})}
+            ${getPlusIcon({ width: 12, height: 15 })}
             Add existing tag
           </a>`;
 
@@ -291,6 +316,7 @@ function addRepoDetailsBar(repoDetails) {
   repoDetailsContent += '</div>';
   return repoDetailsContent;
 }
+
 /* eslint-enable max-len */
 
 /**
@@ -301,11 +327,11 @@ export function exportTagsBts() {
     <div class="col-12 ghstarsmngr-export-bts-container">
       <p class="main-title">Export all your ⭐ arranged by tags</p>
       <button class="ghstarsmngr-export-bt btn btn-sm ghstarsmngr-export-bt-bookmarks">
-        ${getStarIcon({width: 14, height: 13})}
+        ${getStarIcon({ width: 14, height: 13 })}
         Export to bookmarks
       </button>
       <button class="ghstarsmngr-export-bt btn btn-sm ghstarsmngr-export-bt-json">
-        ${getJsonIcon({width: 14, height: 13})}
+        ${getJsonIcon({ width: 14, height: 13 })}
         Export to JSON file
       </button>
       <p class="ghstarsmngr-feedback-export">&nbsp;</p>

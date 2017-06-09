@@ -1,11 +1,11 @@
-import {$} from '../helpers';
-import {HASH} from '../constants';
+import { $ } from '../helpers';
+import { HASH } from '../constants';
 import KEYS from '../keys';
 import '../../style/main.styl';
-import {initStorage, getAccessTokenFromStorage} from './storageSync/initStorageSync';
-import {StoredGenericMngr} from './storageSync/StoredGenericMngr';
-import {StoredTagsMngr} from './storageSync/StoredTagsMngr';
-import {addHeaderTagMenu, updateSidebarInTagPage} from './dom/uiTagPage';
+import { initStorage, getAccessTokenFromStorage } from './storageSync/initStorageSync';
+import { StoredGenericMngr } from './storageSync/StoredGenericMngr';
+import { StoredTagsMngr } from './storageSync/StoredTagsMngr';
+import { addHeaderTagMenu, updateSidebarInTagPage } from './dom/uiTagPage';
 import {
   insertBtCreateTag,
   insertFooterTags,
@@ -13,7 +13,7 @@ import {
   removeLoader,
   displayLoaderWithMessage,
 } from './dom/uiFooterTagsInRepo';
-import {initDOM} from './dom/initDom';
+import { initDOM } from './dom/initDom';
 import {
   getUserDetails,
   getUserStarredRepos,
@@ -24,7 +24,7 @@ import {
 init();
 
 /**
- * Function responsible for all initializations
+ * Function responsible for all initialization
  */
 function init() {
   StoredTagsMngr.checkForTagsNotBeingUsed();
@@ -34,6 +34,7 @@ function init() {
 }
 
 let setIntervalToCheckURL;
+
 /**
  * Checks if URL is User Home and if it is Star tab, or stars section
  * of the User

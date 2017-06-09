@@ -1,6 +1,6 @@
-import {$} from '../../helpers';
-import {HASH} from '../../constants';
-import {StoredTagsMngr} from '../storageSync/StoredTagsMngr';
+import { $ } from '../../helpers';
+import { HASH } from '../../constants';
+import { StoredTagsMngr } from '../storageSync/StoredTagsMngr';
 import {
   repoNameInModalHeader,
   modalContentCreateTag,
@@ -18,6 +18,7 @@ import {
 import {
   enterTagPage,
   leaveTagPage,
+  cleanTag,
   getTagsAndRelatedRepos,
   tagLinkOnTagPageShowRepos,
 } from './uiTagPage';
@@ -31,6 +32,8 @@ export function clickEventListener() {
     const eTarget = {
       isCreateTagBt: t.classList.contains('ghstarmngr-create-tag-bt'),
       isCreateTagBtChild: t.closest('.ghstarmngr-create-tag-bt'),
+      isCleanTag: t.classList.contains('button-clean-tag'),
+      isCleanTagChild: t.closest('.button-clean-tag'),
       isRepoFooterTagCell: t.classList.contains('ghstarmngr-tag-cell'),
       isRepoFooterTagChildren: t.closest('.ghstarmngr-tag-cell'),
       isModalCloseBtOrChild: t.closest('.ghstarmngr-close-button'),
@@ -68,6 +71,11 @@ export function clickEventListener() {
         handleUnstarBtInStarPage(t);
       }
         break;
+      case (eTarget.isCleanTag || eTarget.isCleanTagChild !== null): {
+        e.preventDefault();
+        cleanTag(t);
+      }
+        break;
       case (eTarget.isModalCloseBtOrChild !== null): {
         closeModal();
       }
@@ -95,7 +103,7 @@ export function clickEventListener() {
       case (eTarget.isModalTagListItem): {
         e.preventDefault();
         let repoID = t.closest('.ghstarmngr-modal-tag-list').dataset.repo;
-        setExistingTagInRepo(repoID, {tagID: t.dataset.tag, tagName: t.innerText});
+        setExistingTagInRepo(repoID, { tagID: t.dataset.tag, tagName: t.innerText });
       }
         break;
       case (eTarget.isBtExportBookmark || eTarget.isBtExportBookmarkChild !== null): {
@@ -142,12 +150,8 @@ export function clickEventListener() {
         document.querySelectorAll('.ghstarsmngr-sidebar-tag-list-link').forEach((link) => {
           link.classList.remove('active-tag-link');
         });
-        eTarget.isTagLinkOnTagPage ?
-          t.classList.add('active-tag-link') :
-          t.closest('.ghstarsmngr-sidebar-tag-list-link').classList.add('active-tag-link');
-        let target = eTarget.isTagLinkOnTagPage ?
-          t :
-          t.closest('.ghstarsmngr-sidebar-tag-list-link');
+        eTarget.isTagLinkOnTagPage ? t.classList.add('active-tag-link') : t.closest('.ghstarsmngr-sidebar-tag-list-link').classList.add('active-tag-link'); // eslint-disable-line
+        let target = eTarget.isTagLinkOnTagPage ? t : t.closest('.ghstarsmngr-sidebar-tag-list-link'); // eslint-disable-line
         tagLinkOnTagPageShowRepos(target);
       }
         break;
