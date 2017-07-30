@@ -5,7 +5,7 @@ import { StoredReposMngr } from '../storageSync/StoredReposMngr';
 import { StoredTagsMngr } from '../storageSync/StoredTagsMngr';
 import ghColors from './gh-language-colors.json';
 import moment from 'moment';
-import {createTagsInStarsPage} from '../main';
+import { createTagsInStarsPage } from '../main';
 
 /**
  * Function to run when user enter tag page
@@ -31,9 +31,9 @@ export function leaveTagPage() {
  */
 export function addHeaderTagMenu() {
   if (!$('.ghstarmngr-tag-header-link')) {
-    $('.header-nav.float-left').innerHTML += `
+    $('.header [role="navigation"]').innerHTML += `
         <li class="header-nav-item">
-          <a class="header-nav-link ghstarmngr-tag-header-link">
+          <a class="header-navlink ghstarmngr-tag-header-link">
             ${getTagIcon({ width: 14, height: 13 })}
             Tags
           </a>
