@@ -208,6 +208,6 @@ function loopThroughRepos(callback) {
  * @return {jQuery|HTMLElement}
  */
 function getContainerDivRepo() {
-  return $('.ghstarsmngr-repo-list') || $('.js-repo-filter') || $('.repo-list');
+  return $('.ghstarsmngr-repo-list') || $('.js-repo-filter') || $('.repo-list') || $('.user-profile-repo-filter'); // eslint-disable-line
 }
 

@@ -46,7 +46,7 @@ export function addHeaderTagMenu() {
  * @param {Boolean} isFull
  */
 export async function sidebarListTags(isFull = false) {
-  $('.js-repo-filter').innerHTML += `
+  $('.user-profile-nav + .position-relative').innerHTML += `
     <div class="ghstarsmngr-tag-page-loader ${isFull ? 'ghstarsmngr-tag-page-loader-full' : ''}">
       ${displayLoaderWithMessage('Loading tag page...')}
     </div>`;
@@ -54,7 +54,8 @@ export async function sidebarListTags(isFull = false) {
   let tagsAndRelatedRepos = await getTagsAndRelatedRepos();
   sortTagsArrayByName(tagsAndRelatedRepos);
 
-  $('.js-repo-filter').querySelector('.ghstarsmngr-tag-page-loader').remove();
+  $('.user-profile-nav + .position-relative').querySelector('.ghstarsmngr-tag-page-loader')
+    .remove();
 
   let sidebarContent = `
     <div class="col-3 float-left pr-3 ghstarsmngr-sidebar">
@@ -63,7 +64,7 @@ export async function sidebarListTags(isFull = false) {
 
   tagsAndRelatedRepos.map((tagAndRepos) => sidebarContent += createTagInSidebar(tagAndRepos));
   sidebarContent += '</ul></div>';
-  $('.js-repo-filter').innerHTML += sidebarContent;
+  $('.user-profile-nav + .position-relative').innerHTML += sidebarContent;
 }
 
 /**
@@ -176,7 +177,7 @@ async function createOrUpdateRepoListInTagPage(tagItem) {
     ghstarsmngrRepoListContainer.remove();
   }
 
-  let jsRepoFilter = $('.js-repo-filter');
+  let jsRepoFilter = $('.user-profile-nav + .position-relative');
   jsRepoFilter.innerHTML += `
     <div class="col-9 float-left pl-3 loading-repos-tag-page">
       ${displayLoaderWithMessage('Loading repositories...the more ⭐ the more it takes')}
@@ -323,7 +324,7 @@ function addRepoDetailsBar(repoDetails) {
  * Create section with buttons to export tags to bookmarks and json
  */
 export function exportTagsBts() {
-  $('.js-repo-filter').innerHTML += `
+  $('.user-profile-nav + .position-relative').innerHTML += `
     <div class="col-12 ghstarsmngr-export-bts-container">
       <p class="main-title">Export all your ⭐ arranged by tags</p>
       <button class="ghstarsmngr-export-bt btn btn-sm ghstarsmngr-export-bt-bookmarks">
