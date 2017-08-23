@@ -31,7 +31,7 @@ export function leaveTagPage() {
  */
 export function addHeaderTagMenu() {
   if (!$('.ghstarmngr-tag-header-link')) {
-    $('.header [role="navigation"]').innerHTML += `
+    $('header [role="navigation"]').innerHTML += `
         <li class="header-nav-item">
           <a class="header-navlink ghstarmngr-tag-header-link">
             ${getTagIcon({ width: 14, height: 13 })}
